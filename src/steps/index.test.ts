@@ -1,92 +1,107 @@
-import { createMockStepExecutionContext } from '@jupiterone/integration-sdk-testing';
+import {
+  createMockStepExecutionContext,
+  Recording,
+} from '@jupiterone/integration-sdk-testing';
+
+import { setupSigSciRecording } from '../../test/recording';
 
 import { IntegrationConfig } from '../config';
-import { buildGroupUserRelationships, fetchGroups, fetchUsers } from './access';
-import { fetchAccountDetails } from './account';
+import { fetchUsers } from './user';
+import { fetchCorps } from './organization';
 import { integrationConfig } from '../../test/config';
 
-test('should collect data', async () => {
-  const context = createMockStepExecutionContext<IntegrationConfig>({
-    instanceConfig: integrationConfig,
+describe('should collect corp and user data', () => {
+  let recording: Recording;
+
+  beforeEach(() => {
+    recording = setupSigSciRecording({
+      directory: __dirname,
+      name: 'buildCorpAndUserRelationship',
+    });
   });
 
-  // Simulates dependency graph execution.
-  // See https://github.com/JupiterOne/sdk/issues/262.
-  await fetchAccountDetails(context);
-  await fetchUsers(context);
-  await fetchGroups(context);
-  await buildGroupUserRelationships(context);
-
-  // Review snapshot, failure is a regression
-  expect({
-    numCollectedEntities: context.jobState.collectedEntities.length,
-    numCollectedRelationships: context.jobState.collectedRelationships.length,
-    collectedEntities: context.jobState.collectedEntities,
-    collectedRelationships: context.jobState.collectedRelationships,
-    encounteredTypes: context.jobState.encounteredTypes,
-  }).toMatchSnapshot();
-
-  const accounts = context.jobState.collectedEntities.filter((e) =>
-    e._class.includes('Account'),
-  );
-  expect(accounts.length).toBeGreaterThan(0);
-  expect(accounts).toMatchGraphObjectSchema({
-    _class: ['Account'],
-    schema: {
-      additionalProperties: false,
-      properties: {
-        _type: { const: 'acme_account' },
-        manager: { type: 'string' },
-        _rawData: {
-          type: 'array',
-          items: { type: 'object' },
-        },
-      },
-      required: ['manager'],
-    },
+  afterEach(async () => {
+    await recording.stop();
   });
 
-  const users = context.jobState.collectedEntities.filter((e) =>
-    e._class.includes('User'),
-  );
-  expect(users.length).toBeGreaterThan(0);
-  expect(users).toMatchGraphObjectSchema({
-    _class: ['User'],
-    schema: {
-      additionalProperties: false,
-      properties: {
-        _type: { const: 'acme_user' },
-        firstName: { type: 'string' },
-        _rawData: {
-          type: 'array',
-          items: { type: 'object' },
-        },
-      },
-      required: ['firstName'],
-    },
-  });
+  test('validate client integration and converters', async () => {
+    // Arrange
+    const context = createMockStepExecutionContext<IntegrationConfig>({
+      instanceConfig: integrationConfig,
+    });
 
-  const userGroups = context.jobState.collectedEntities.filter((e) =>
-    e._class.includes('UserGroup'),
-  );
-  expect(userGroups.length).toBeGreaterThan(0);
-  expect(userGroups).toMatchGraphObjectSchema({
-    _class: ['UserGroup'],
-    schema: {
-      additionalProperties: false,
-      properties: {
-        _type: { const: 'acme_group' },
-        logoLink: {
-          type: 'string',
-          // Validate that the `logoLink` property has a URL format
-          format: 'url',
-        },
-        _rawData: {
-          type: 'array',
-          items: { type: 'object' },
+    // Act
+    await fetchCorps(context);
+    await fetchUsers(context);
+
+    // Assert
+    expect({
+      numCollectedEntities: context.jobState.collectedEntities.length,
+      numCollectedRelationships: context.jobState.collectedRelationships.length,
+      collectedEntities: context.jobState.collectedEntities,
+      collectedRelationships: context.jobState.collectedRelationships,
+      encounteredTypes: context.jobState.encounteredTypes,
+    }).toMatchSnapshot();
+
+    const accounts = context.jobState.collectedEntities.filter((e) =>
+      e._class.includes('Organization'),
+    );
+    expect(accounts.length).toBeGreaterThan(0);
+    expect(accounts).toMatchGraphObjectSchema({
+      _class: ['Organization'],
+      schema: {
+        additionalProperties: false,
+        properties: {
+          _type: { const: 'sigsci_corp' },
+          _rawData: {
+            type: 'array',
+            items: { type: 'object' },
+          },
+          name: { type: 'string' },
+          displayName: { type: 'string' },
+          createdOn: { type: 'number' },
+          smallIconURI: { type: 'string' },
+          siteLimit: { type: 'number' },
+          sitesUri: { type: 'string' },
+          authType: { type: 'string' },
+          logoutURI: { type: 'string' },
+          samlCert: { type: 'string' },
+          samlEndpoint: { type: 'string' },
+          signRequestsUsingStoredCert: { type: 'boolean' },
+          samlRequestCert: { type: 'string' },
+          sessionMaxAgeDashboard: { type: 'number' },
+          apiTokenMaxAge: { type: 'number' },
+          restrictedAccessTokens: { type: 'boolean' },
+          ssoProvisioningConfigured: { type: 'boolean' },
         },
       },
-      required: ['logoLink'],
-    },
+    });
+
+    const users = context.jobState.collectedEntities.filter((e) =>
+      e._class.includes('User'),
+    );
+    expect(users.length).toBeGreaterThan(0);
+    expect(users).toMatchGraphObjectSchema({
+      _class: ['User'],
+      schema: {
+        additionalProperties: false,
+        properties: {
+          _type: { const: 'sigsci_user' },
+          _rawData: {
+            type: 'array',
+            items: { type: 'object' },
+          },
+          name: { type: 'string' },
+          displayName: { type: 'string' },
+          createdOn: { type: 'number' },
+          username: { type: 'string' },
+          email: { type: 'string' },
+          mfaEnabled: { type: 'boolean' },
+          active: { type: 'boolean' },
+          role: { type: 'string' },
+          webLink: { type: 'string' },
+        },
+      },
+    });
   });
 });

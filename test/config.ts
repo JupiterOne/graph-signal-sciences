@@ -7,10 +7,10 @@ if (process.env.LOAD_ENV) {
     path: path.join(__dirname, '../.env'),
   });
 }
-const DEFAULT_CLIENT_ID = 'dummy-acme-client-id';
-const DEFAULT_CLIENT_SECRET = 'dummy-acme-client-secret';
+const DEFAULT_API_USER = 'dummy-sigsci-api-user';
+const DEFAULT_API_TOKEN = 'dummy-sigsci-api-token';
 
 export const integrationConfig: IntegrationConfig = {
-  clientId: process.env.CLIENT_ID || DEFAULT_CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET || DEFAULT_CLIENT_SECRET,
+  apiUser: process.env.API_USER || DEFAULT_API_USER,
+  apiToken: process.env.API_TOKEN || DEFAULT_API_TOKEN,
 };
