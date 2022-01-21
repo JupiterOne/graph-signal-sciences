@@ -3,8 +3,7 @@
 ## Signal Sciences + JupiterOne Integration Benefits
 
 - Visualize Signal Sciences corps and users in the JupiterOne graph.
-- Map Signal Sciences users to employees in your JupiterOne account.
-- Monitor changes to Signal Sciences users using JupiterOne alerts.
+- Monitor changes to Signal Sciences users and corps using JupiterOne alerts.
 
 ## How it Works
 
@@ -31,8 +30,10 @@ If you need help with this integration, please contact
 ### In Signal Sciences
 
 1. [Add API access token](https://dashboard.signalsciences.net/corps/jupiterone/user/apitokens#add).
-2. Save the provided token in a secure location. You will need it as you
-   configure Signal Sciences in JupiterOne.
+   The access token generated will have the same role as the logged in user. The
+   role of observer is sufficient for the ingestion of corps and users.
+2. Save the provided token in a secure location. You will need it to configure
+   Signal Sciences in JupiterOne.
 
 ### In JupiterOne
 

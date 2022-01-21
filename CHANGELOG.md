@@ -7,3 +7,6 @@ and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+[1.0.0] - 2022-01-21 Initial release of the Signal Sciences integration.
+Includes ingestion of users and corps (organizations).
