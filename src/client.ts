@@ -30,7 +30,7 @@ export class APIClient {
     await this.getJson(endpoint, {
       headers: this.generateHeaders(),
     }).catch((error) => {
-      if (error.statusCode === 401) {
+      if (error.status === 401) {
         throw new IntegrationProviderAuthenticationError({
           cause: error,
           endpoint,
@@ -133,7 +133,7 @@ export class APIClient {
   }
 
   /**
-   * Uses nodejs https.get method to make HTTTP requests.
+   * Uses nodejs https.get method to make HTTP requests.
    * Parses JSON result, returning the data.
    * @param endpoint
    * @param options
@@ -159,17 +159,16 @@ export class APIClient {
         });
 
         response.on('end', () => {
+          const result = safeJsonParse(dataString);
           if (response.statusCode === 200) {
             resolve({
               status: 200,
-              data: dataString ? JSON.parse(dataString)?.data : null,
+              data: result.data?.data,
             });
           } else {
             reject({
               status: response.statusCode,
-              statusText: dataString
-                ? JSON.parse(dataString)?.message
-                : 'An error occurred.',
+              statusText: result.data?.message ?? 'An error occurred.',
             });
           }
         });
@@ -182,6 +181,23 @@ export class APIClient {
         });
       });
     });
+  }
+}
+
+/**
+ * Safely converts string to js object or returns error if string is not valid json.
+ * @param dataString stringified json
+ * @returns {data?: any, error?: Error}
+ */
+function safeJsonParse(dataString: string): {
+  data?: any;
+  error?: Error;
+} {
+  try {
+    return { data: JSON.parse(dataString) };
+  } catch (error) {
+    console.error(error);
+    return { error };
   }
 }
 
