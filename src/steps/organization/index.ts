@@ -11,10 +11,13 @@ import { createOrganizationEntity } from './converter';
 export const ORGANIZATIONS_ENTITY_KEY = 'entity:organizations';
 
 export async function fetchCorps({
+  logger,
   instance,
   jobState,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
-  const apiClient = createAPIClient(instance.config);
+  const apiClient = createAPIClient(logger, instance.config);
+
+  logger.info('Querying for corps from signal sciences...');
 
   await apiClient.iterateCorps(async (corp) => {
     await jobState.addEntity(createOrganizationEntity(corp));

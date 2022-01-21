@@ -1,7 +1,7 @@
 {
-  "name": "@jupiterone/integration-template",
+  "name": "@jupiterone/graph-signal-sciences",
   "version": "0.0.0",
-  "description": "A JupiterOne Integration",
+  "description": "A JupiterOne Integration for integesting data from Signal Sciences",
   "license": "MPL-2.0",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -27,6 +27,9 @@
     "test:ci": "yarn lint && yarn type-check && yarn test",
     "build": "tsc -p tsconfig.dist.json --declaration && cp README.md dist/README.md && cp -r jupiterone/ dist/jupiterone/",
     "prepush": "yarn lint && yarn type-check && jest --changedSince main"
+  },
+  "dependencies": {
+    "axios": "^0.25.0"
   },
   "peerDependencies": {
     "@jupiterone/integration-sdk-core": "^7.4.1"

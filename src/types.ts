@@ -28,3 +28,8 @@ export interface SignalSciencesCorp {
   restrictedAccessTokens: boolean;
   ssoProvisioningConfigured: boolean;
 }
+
+export interface SigSciResponseFormat {
+  data?: any;
+  message?: string;
+}

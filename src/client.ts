@@ -1,13 +1,17 @@
-import https from 'https';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import {
   IntegrationProviderAuthenticationError,
-  IntegrationError,
   IntegrationProviderAPIError,
+  IntegrationLogger,
 } from '@jupiterone/integration-sdk-core';
 
 import { IntegrationConfig } from './config';
-import { SignalSciencesUser, SignalSciencesCorp } from './types';
+import {
+  SignalSciencesUser,
+  SignalSciencesCorp,
+  SigSciResponseFormat,
+} from './types';
 
 export type ResourceIteratee<T> = (each: T) => Promise<void> | void;
 
@@ -22,29 +26,16 @@ const BASE_URI = 'https://dashboard.signalsciences.net/api/v0';
  * resources.
  */
 export class APIClient {
-  constructor(readonly config: IntegrationConfig) {}
+  constructor(
+    readonly logger: IntegrationLogger,
+    readonly config: IntegrationConfig,
+  ) {}
 
   public async verifyAuthentication(): Promise<void> {
     const endpoint = `${BASE_URI}/corps`;
 
-    await this.getJson(endpoint, {
+    await this.fetchWithRetries(endpoint, {
       headers: this.generateHeaders(),
-    }).catch((error) => {
-      if (error.status === 401) {
-        throw new IntegrationProviderAuthenticationError({
-          cause: error,
-          endpoint,
-          status: error.status,
-          statusText: error.statusText,
-        });
-      } else {
-        throw new IntegrationProviderAPIError({
-          cause: error,
-          endpoint,
-          status: error.status,
-          statusText: error.statusText,
-        });
-      }
     });
   }
 
@@ -58,7 +49,7 @@ export class APIClient {
   ): Promise<void> {
     const endpoint = `${BASE_URI}/corps`;
 
-    const { data } = await this.getJsonWithRetries(endpoint, {
+    const { data } = await this.fetchWithRetries(endpoint, {
       headers: this.generateHeaders(),
     });
 
@@ -78,7 +69,7 @@ export class APIClient {
   ): Promise<void> {
     const endpoint = this.buildEndpoint(corpName, '/users');
 
-    const { data } = await this.getJsonWithRetries(endpoint, {
+    const { data } = await this.fetchWithRetries(endpoint, {
       headers: this.generateHeaders(),
     });
 
@@ -89,10 +80,7 @@ export class APIClient {
 
   private buildEndpoint(corp: string, path?: string) {
     if (!corp) {
-      throw new IntegrationError({
-        message: `Parameter 'corp' is required, but received ${corp}`,
-        code: 'INVALID_PARAM_ERROR',
-      });
+      throw new Error(`Parameter 'corp' is required, but received ${corp}`);
     }
 
     if (path) {
@@ -112,95 +100,56 @@ export class APIClient {
     };
   }
 
-  private async getJsonWithRetries(endpoint, options, retries = 0) {
+  private async fetchWithRetries(endpoint, options, retries = 0) {
     try {
-      return await this.getJson(endpoint, options);
+      return await this.fetch(endpoint, options);
     } catch (error) {
       if ([429, 503, 504].includes(error.status) && retries < 5) {
-        // TODO: add delay before retry (sp - 1/2022)
-        return await this.getJsonWithRetries(endpoint, options, ++retries);
+        // TODO: add delay before retry (spoulton - 1/2022)
+        return await this.fetchWithRetries(endpoint, options, ++retries);
       } else {
-        console.error(error);
-
-        throw new IntegrationProviderAPIError({
-          cause: error,
-          endpoint,
-          status: error.status,
-          statusText: error.statusText,
-        });
+        throw error;
       }
     }
   }
 
   /**
-   * Uses nodejs https.get method to make HTTP requests.
-   * Parses JSON result, returning the data.
+   * Makes GET request and then
+   * parses JSON result, returning the data.
    * @param endpoint
    * @param options
    * @returns Promise
    */
-  private getJson(
+  private async fetch(
     endpoint: string,
-    options: https.RequestOptions,
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let dataString = '';
-
-      const request = https.get(endpoint, options, (response) => {
-        response.on('error', (error) => {
-          reject({
-            status: 500,
-            statusText: error.message,
-          });
-        });
-
-        response.on('data', (chunk: string) => {
-          dataString += chunk;
-        });
-
-        response.on('end', () => {
-          const result = safeJsonParse(dataString);
-          if (response.statusCode === 200) {
-            resolve({
-              status: 200,
-              data: result.data?.data,
-            });
-          } else {
-            reject({
-              status: response.statusCode,
-              statusText: result.data?.message ?? 'An error occurred.',
-            });
-          }
-        });
-      });
-
-      request.on('error', (error) => {
-        reject({
-          status: 500,
-          statusText: error.message,
-        });
-      });
+    options: AxiosRequestConfig,
+  ): Promise<SigSciResponseFormat> {
+    const { status, statusText, data } = await axios.get(endpoint, {
+      ...options,
+      validateStatus: () => true,
     });
+
+    if (status === 200) {
+      return data as SigSciResponseFormat;
+    } else if (status === 401) {
+      throw new IntegrationProviderAuthenticationError({
+        endpoint,
+        status: status,
+        statusText: statusText,
+      });
+    } else {
+      throw new IntegrationProviderAPIError({
+        endpoint,
+        status: status,
+        statusText: statusText,
+      });
+    }
   }
 }
 
-/**
- * Safely converts string to js object or returns error if string is not valid json.
- * @param dataString stringified json
- * @returns {data?: any, error?: Error}
- */
-function safeJsonParse(dataString: string): {
-  data?: any;
-  error?: Error;
-} {
-  try {
-    return { data: JSON.parse(dataString) };
-  } catch (error) {
-    console.error(error);
-    return { error };
-  }
-}
-
-export function createAPIClient(config: IntegrationConfig): APIClient {
-  return new APIClient(config);
+export function createAPIClient(
+  logger: IntegrationLogger,
+  config: IntegrationConfig,
+): APIClient {
+  return new APIClient(logger, config);
 }

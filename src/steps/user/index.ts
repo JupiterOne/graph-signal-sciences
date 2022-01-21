@@ -12,10 +12,13 @@ import {
 } from './converter';
 
 export async function fetchUsers({
+  logger,
   instance,
   jobState,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
-  const apiClient = createAPIClient(instance.config);
+  const apiClient = createAPIClient(logger, instance.config);
+
+  logger.info('Querying for users from signal sciences...');
 
   await jobState.iterateEntities(
     { _type: Entities.ORGANIZATION._type },
