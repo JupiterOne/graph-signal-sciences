@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import axiosRetry from 'axios-retry';
 
 import {
   IntegrationProviderAuthenticationError,
@@ -18,29 +19,40 @@ export type ResourceIteratee<T> = (each: T) => Promise<void> | void;
 const BASE_URI = 'https://dashboard.signalsciences.net/api/v0';
 
 /**
- * An APIClient maintains authentication state and provides an interface to
- * third party data APIs.
- *
- * It is recommended that integrations wrap provider data APIs to provide a
- * place to handle error responses and implement common patterns for iterating
- * resources.
+ * API Client providing access to key Signal Science resources.
+ * NOTE: pagination is not supported by provider on /corps and /users.
+ * Pagination, in general, is supported by other endpoints. This will
+ * need to be considered during future development.
+ * TODO: Add pagination.
  */
-export class APIClient {
+export class SignalSciencesAPIClient {
   constructor(
     readonly logger: IntegrationLogger,
     readonly config: IntegrationConfig,
-  ) {}
+  ) {
+    axiosRetry(axios, {
+      retries: 5,
+      retryDelay: (retryCount, error) => {
+        if (error.response?.status === 429) {
+          return retryCount * 1000;
+        }
+
+        return 0;
+      },
+    });
+  }
 
   public async verifyAuthentication(): Promise<void> {
     const endpoint = `${BASE_URI}/corps`;
 
-    await this.fetchWithRetries(endpoint, {
+    await this.fetch(endpoint, {
       headers: this.generateHeaders(),
     });
   }
 
   /**
    * Iterates each corp resource in the provider.
+   * Note: Pagination is not currently supported on this endpoint by the provider.
    *
    * @param iteratee receives each resource to produce entities/relationship
    */
@@ -49,7 +61,7 @@ export class APIClient {
   ): Promise<void> {
     const endpoint = `${BASE_URI}/corps`;
 
-    const { data } = await this.fetchWithRetries(endpoint, {
+    const { data } = await this.fetch(endpoint, {
       headers: this.generateHeaders(),
     });
 
@@ -60,6 +72,7 @@ export class APIClient {
 
   /**
    * Iterates each user resource in the provider based on the provided corp.
+   * Note: Pagination is not currently supported on this endpoint by the provider.
    *
    * @param iteratee receives each resource to produce entities/relationships
    */
@@ -69,7 +82,7 @@ export class APIClient {
   ): Promise<void> {
     const endpoint = this.buildEndpoint(corpName, '/users');
 
-    const { data } = await this.fetchWithRetries(endpoint, {
+    const { data } = await this.fetch(endpoint, {
       headers: this.generateHeaders(),
     });
 
@@ -100,22 +113,8 @@ export class APIClient {
     };
   }
 
-  private async fetchWithRetries(endpoint, options, retries = 0) {
-    try {
-      return await this.fetch(endpoint, options);
-    } catch (error) {
-      if ([429, 503, 504].includes(error.status) && retries < 5) {
-        // TODO: add delay before retry (spoulton - 1/2022)
-        return await this.fetchWithRetries(endpoint, options, ++retries);
-      } else {
-        throw error;
-      }
-    }
-  }
-
   /**
-   * Makes GET request and then
-   * parses JSON result, returning the data.
+   * Makes GET request, returning data or throws an error.
    * @param endpoint
    * @param options
    * @returns Promise
@@ -150,6 +149,6 @@ export class APIClient {
 export function createAPIClient(
   logger: IntegrationLogger,
   config: IntegrationConfig,
-): APIClient {
-  return new APIClient(logger, config);
+): SignalSciencesAPIClient {
+  return new SignalSciencesAPIClient(logger, config);
 }

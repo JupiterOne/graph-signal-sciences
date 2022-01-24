@@ -29,7 +29,8 @@
     "prepush": "yarn lint && yarn type-check && jest --changedSince main"
   },
   "dependencies": {
-    "axios": "^0.25.0"
+    "axios": "^0.25.0",
+    "axios-retry": "^3.2.4"
   },
   "peerDependencies": {
     "@jupiterone/integration-sdk-core": "^7.4.1"
