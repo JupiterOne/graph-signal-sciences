@@ -15,6 +15,9 @@ Click
 [Add API access token](https://dashboard.signalsciences.net/corps/jupiterone/user/apitokens#add)
 to add a new token, provide a name to identify this access token.
 
+**Note:** The role of the user will be applied to the access token. Any role is
+sufficient but **Observer** is recommended.
+
 Copy the access token for use in the next step.
 
 ## Authentication

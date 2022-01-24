@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should collect corp and user data validate client integration and converters 1`] = `
+exports[`should collect user data validate client integration and converters 1`] = `
 Object {
   "collectedEntities": Array [
     Object {
@@ -12,44 +12,27 @@ Object {
         Object {
           "name": "default",
           "rawData": Object {
-            "apiAllowedIPs": Array [],
-            "apiTokenMaxAge": 0,
-            "authType": "builtin",
-            "created": "2022-01-10T18:29:55Z",
             "displayName": "JupiterOne",
-            "logoutURI": "",
             "name": "jupiterone",
-            "restrictedAccessTokens": false,
-            "samlCert": "",
-            "samlEndpoint": "",
-            "samlRequestCert": "",
-            "sessionMaxAgeDashboard": 2592000,
-            "signRequestsUsingStoredCert": false,
-            "siteLimit": 5,
-            "sites": Object {
-              "uri": "/api/v0/corps/jupiterone/sites",
-            },
-            "smallIconURI": "",
-            "ssoProvisioningConfigured": false,
           },
         },
       ],
       "_type": "sigsci_corp",
-      "apiTokenMaxAge": 0,
-      "authType": "builtin",
-      "createdOn": 1641839395000,
+      "apiTokenMaxAge": undefined,
+      "authType": undefined,
+      "createdOn": undefined,
       "displayName": "JupiterOne",
-      "logoutURI": "",
+      "logoutURI": undefined,
       "name": "jupiterone",
-      "restrictedAccessTokens": false,
-      "samlCert": "",
-      "samlRequestCert": "",
-      "sessionMaxAgeDashboard": 2592000,
-      "signRequestsUsingStoredCert": false,
-      "siteLimit": 5,
-      "sitesUri": "/api/v0/corps/jupiterone/sites",
-      "smallIconURI": "",
-      "ssoProvisioningConfigured": false,
+      "restrictedAccessTokens": undefined,
+      "samlCert": undefined,
+      "samlRequestCert": undefined,
+      "sessionMaxAgeDashboard": undefined,
+      "signRequestsUsingStoredCert": undefined,
+      "siteLimit": undefined,
+      "sitesUri": undefined,
+      "smallIconURI": undefined,
+      "ssoProvisioningConfigured": undefined,
       "webLink": "https://dashboard.signalsciences.net/corps/jupiterone/overview",
     },
     Object {

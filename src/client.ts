@@ -46,7 +46,7 @@ export class SignalSciencesAPIClient {
     const endpoint = `${BASE_URI}/corps`;
 
     await this.fetch(endpoint, {
-      headers: this.generateHeaders(),
+      headers: this.headers,
     });
   }
 
@@ -62,7 +62,7 @@ export class SignalSciencesAPIClient {
     const endpoint = `${BASE_URI}/corps`;
 
     const { data } = await this.fetch(endpoint, {
-      headers: this.generateHeaders(),
+      headers: this.headers,
     });
 
     for (const corp of data) {
@@ -83,7 +83,7 @@ export class SignalSciencesAPIClient {
     const endpoint = this.buildEndpoint(corpName, '/users');
 
     const { data } = await this.fetch(endpoint, {
-      headers: this.generateHeaders(),
+      headers: this.headers,
     });
 
     for (const user of data) {
@@ -103,12 +103,10 @@ export class SignalSciencesAPIClient {
     }
   }
 
-  private generateHeaders() {
-    const { apiUser, apiToken } = this.config;
-
+  private get headers() {
     return {
-      'x-api-user': apiUser,
-      'x-api-token': apiToken,
+      'x-api-user': this.config.apiUser,
+      'x-api-token': this.config.apiToken,
       'Content-Type': 'application/json',
     };
   }
@@ -125,20 +123,23 @@ export class SignalSciencesAPIClient {
   ): Promise<SigSciResponseFormat> {
     const { status, statusText, data } = await axios.get(endpoint, {
       ...options,
+      // Prevents non-200 responses from failing the promise.
       validateStatus: () => true,
     });
 
     if (status === 200) {
       return data as SigSciResponseFormat;
-    } else if (status === 401) {
+    } else if ([401, 403].includes(status)) {
       throw new IntegrationProviderAuthenticationError({
         endpoint,
+        cause: new Error(data),
         status: status,
         statusText: statusText,
       });
     } else {
       throw new IntegrationProviderAPIError({
         endpoint,
+        cause: new Error(data),
         status: status,
         statusText: statusText,
       });

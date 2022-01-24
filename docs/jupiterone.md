@@ -31,7 +31,7 @@ If you need help with this integration, please contact
 
 1. [Add API access token](https://dashboard.signalsciences.net/corps/jupiterone/user/apitokens#add).
    The access token generated will have the same role as the logged in user. The
-   role of observer is sufficient for the ingestion of corps and users.
+   role of **Observer** is sufficient for the ingestion of corps and users.
 2. Save the provided token in a secure location. You will need it to configure
    Signal Sciences in JupiterOne.
 

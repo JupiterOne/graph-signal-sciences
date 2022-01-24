@@ -3,14 +3,15 @@ import {
   Recording,
 } from '@jupiterone/integration-sdk-testing';
 
-import { setupSigSciRecording } from '../../test/recording';
+import { setupSigSciRecording } from '../../../test/recording';
 
-import { IntegrationConfig } from '../config';
-import { fetchUsers } from './user';
-import { fetchCorps } from './organization';
-import { integrationConfig } from '../../test/config';
+import { IntegrationConfig } from '../../config';
+import { fetchUsers } from './';
+import { integrationConfig } from '../../../test/config';
+import { createOrganizationEntity } from '../organization/converter';
+import { SignalSciencesCorp, SignalSciencesUser } from '../../types';
 
-describe('should collect corp and user data', () => {
+describe('should collect user data', () => {
   let recording: Recording;
 
   beforeEach(() => {
@@ -29,9 +30,14 @@ describe('should collect corp and user data', () => {
     const context = createMockStepExecutionContext<IntegrationConfig>({
       instanceConfig: integrationConfig,
     });
+    context.jobState.addEntity(
+      createOrganizationEntity({
+        name: 'jupiterone',
+        displayName: 'JupiterOne',
+      } as SignalSciencesCorp),
+    );
 
     // Act
-    await fetchCorps(context);
     await fetchUsers(context);
 
     // Assert
@@ -42,40 +48,6 @@ describe('should collect corp and user data', () => {
       collectedRelationships: context.jobState.collectedRelationships,
       encounteredTypes: context.jobState.encounteredTypes,
     }).toMatchSnapshot();
-
-    const accounts = context.jobState.collectedEntities.filter((e) =>
-      e._class.includes('Organization'),
-    );
-    expect(accounts.length).toBeGreaterThan(0);
-    expect(accounts).toMatchGraphObjectSchema({
-      _class: ['Organization'],
-      schema: {
-        additionalProperties: false,
-        properties: {
-          _type: { const: 'sigsci_corp' },
-          _rawData: {
-            type: 'array',
-            items: { type: 'object' },
-          },
-          name: { type: 'string' },
-          displayName: { type: 'string' },
-          createdOn: { type: 'number' },
-          smallIconURI: { type: 'string' },
-          siteLimit: { type: 'number' },
-          sitesUri: { type: 'string' },
-          authType: { type: 'string' },
-          logoutURI: { type: 'string' },
-          samlCert: { type: 'string' },
-          samlEndpoint: { type: 'string' },
-          signRequestsUsingStoredCert: { type: 'boolean' },
-          samlRequestCert: { type: 'string' },
-          sessionMaxAgeDashboard: { type: 'number' },
-          apiTokenMaxAge: { type: 'number' },
-          restrictedAccessTokens: { type: 'boolean' },
-          ssoProvisioningConfigured: { type: 'boolean' },
-        },
-      },
-    });
 
     const users = context.jobState.collectedEntities.filter((e) =>
       e._class.includes('User'),
