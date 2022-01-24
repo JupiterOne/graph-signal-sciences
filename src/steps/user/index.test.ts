@@ -9,7 +9,7 @@ import { IntegrationConfig } from '../../config';
 import { fetchUsers } from './';
 import { integrationConfig } from '../../../test/config';
 import { createOrganizationEntity } from '../organization/converter';
-import { SignalSciencesCorp, SignalSciencesUser } from '../../types';
+import { SignalSciencesCorp } from '../../types';
 
 describe('should collect user data', () => {
   let recording: Recording;
@@ -30,7 +30,7 @@ describe('should collect user data', () => {
     const context = createMockStepExecutionContext<IntegrationConfig>({
       instanceConfig: integrationConfig,
     });
-    context.jobState.addEntity(
+    await context.jobState.addEntity(
       createOrganizationEntity({
         name: 'jupiterone',
         displayName: 'JupiterOne',
