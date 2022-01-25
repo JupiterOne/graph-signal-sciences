@@ -8,5 +8,7 @@ and this project adheres to
 
 ## [Unreleased]
 
-Initial release of the Signal Sciences integration. Includes ingestion of users
-and corps (organizations).
+## [1.0.0] - 2022-01-25
+
+- Initial release of the Signal Sciences integration. Includes ingestion of
+  users and corps (organizations).
