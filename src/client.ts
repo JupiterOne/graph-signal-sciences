@@ -1,124 +1,155 @@
-import http from 'http';
+import axios, { AxiosRequestConfig } from 'axios';
+import axiosRetry from 'axios-retry';
 
-import { IntegrationProviderAuthenticationError } from '@jupiterone/integration-sdk-core';
+import {
+  IntegrationProviderAuthenticationError,
+  IntegrationProviderAPIError,
+  IntegrationLogger,
+} from '@jupiterone/integration-sdk-core';
 
 import { IntegrationConfig } from './config';
-import { AcmeUser, AcmeGroup } from './types';
+import {
+  SignalSciencesUser,
+  SignalSciencesCorp,
+  SigSciResponseFormat,
+} from './types';
 
 export type ResourceIteratee<T> = (each: T) => Promise<void> | void;
 
+const BASE_URI = 'https://dashboard.signalsciences.net/api/v0';
+
 /**
- * An APIClient maintains authentication state and provides an interface to
- * third party data APIs.
- *
- * It is recommended that integrations wrap provider data APIs to provide a
- * place to handle error responses and implement common patterns for iterating
- * resources.
+ * API Client providing access to key Signal Science resources.
+ * NOTE: pagination is not supported by provider on /corps and /users.
+ * Pagination, in general, is supported by other endpoints. This will
+ * need to be considered during future development.
+ * TODO: Add pagination.
  */
-export class APIClient {
-  constructor(readonly config: IntegrationConfig) {}
+export class SignalSciencesAPIClient {
+  constructor(
+    readonly logger: IntegrationLogger,
+    readonly config: IntegrationConfig,
+  ) {
+    axiosRetry(axios, {
+      retries: 5,
+      retryDelay: (retryCount, error) => {
+        if (error.response?.status === 429) {
+          return retryCount * 1000;
+        }
+
+        return 0;
+      },
+    });
+  }
 
   public async verifyAuthentication(): Promise<void> {
-    // TODO make the most light-weight request possible to validate
-    // authentication works with the provided credentials, throw an err if
-    // authentication fails
-    const request = new Promise<void>((resolve, reject) => {
-      http.get(
-        {
-          hostname: 'localhost',
-          port: 443,
-          path: '/api/v1/some/endpoint?limit=1',
-          agent: false,
-          timeout: 10,
-        },
-        (res) => {
-          if (res.statusCode !== 200) {
-            reject(new Error('Provider authentication failed'));
-          } else {
-            resolve();
-          }
-        },
-      );
+    const endpoint = `${BASE_URI}/corps`;
+
+    await this.fetch(endpoint, {
+      headers: this.headers,
+    });
+  }
+
+  /**
+   * Iterates each corp resource in the provider.
+   * Note: Pagination is not currently supported on this endpoint by the provider.
+   *
+   * @param iteratee receives each resource to produce entities/relationship
+   */
+  public async iterateCorps(
+    iteratee: ResourceIteratee<SignalSciencesCorp>,
+  ): Promise<void> {
+    const endpoint = `${BASE_URI}/corps`;
+
+    const { data } = await this.fetch(endpoint, {
+      headers: this.headers,
     });
 
-    try {
-      await request;
-    } catch (err) {
-      throw new IntegrationProviderAuthenticationError({
-        cause: err,
-        endpoint: 'https://localhost/api/v1/some/endpoint?limit=1',
-        status: err.status,
-        statusText: err.statusText,
-      });
+    for (const corp of data) {
+      await iteratee(corp);
     }
   }
 
   /**
-   * Iterates each user resource in the provider.
+   * Iterates each user resource in the provider based on the provided corp.
+   * Note: Pagination is not currently supported on this endpoint by the provider.
    *
    * @param iteratee receives each resource to produce entities/relationships
    */
   public async iterateUsers(
-    iteratee: ResourceIteratee<AcmeUser>,
+    corpName: string,
+    iteratee: ResourceIteratee<SignalSciencesUser>,
   ): Promise<void> {
-    // TODO paginate an endpoint, invoke the iteratee with each record in the
-    // page
-    //
-    // The provider API will hopefully support pagination. Functions like this
-    // should maintain pagination state, and for each page, for each record in
-    // the page, invoke the `ResourceIteratee`. This will encourage a pattern
-    // where each resource is processed and dropped from memory.
+    const endpoint = this.buildEndpoint(corpName, '/users');
 
-    const users: AcmeUser[] = [
-      {
-        id: 'acme-user-1',
-        name: 'User One',
-      },
-      {
-        id: 'acme-user-2',
-        name: 'User Two',
-      },
-    ];
+    const { data } = await this.fetch(endpoint, {
+      headers: this.headers,
+    });
 
-    for (const user of users) {
+    for (const user of data) {
       await iteratee(user);
     }
   }
 
+  private buildEndpoint(corp: string, path?: string) {
+    if (!corp) {
+      throw new Error(`Parameter 'corp' is required, but received ${corp}`);
+    }
+
+    if (path) {
+      return `${BASE_URI}/corps/${corp}${path}`;
+    } else {
+      return `${BASE_URI}/corps/${corp}`;
+    }
+  }
+
+  private get headers() {
+    return {
+      'x-api-user': this.config.apiUser,
+      'x-api-token': this.config.apiToken,
+      'Content-Type': 'application/json',
+    };
+  }
+
   /**
-   * Iterates each group resource in the provider.
-   *
-   * @param iteratee receives each resource to produce entities/relationships
+   * Makes GET request, returning data or throws an error.
+   * @param endpoint
+   * @param options
+   * @returns Promise
    */
-  public async iterateGroups(
-    iteratee: ResourceIteratee<AcmeGroup>,
-  ): Promise<void> {
-    // TODO paginate an endpoint, invoke the iteratee with each record in the
-    // page
-    //
-    // The provider API will hopefully support pagination. Functions like this
-    // should maintain pagination state, and for each page, for each record in
-    // the page, invoke the `ResourceIteratee`. This will encourage a pattern
-    // where each resource is processed and dropped from memory.
+  private async fetch(
+    endpoint: string,
+    options: AxiosRequestConfig,
+  ): Promise<SigSciResponseFormat> {
+    const { status, statusText, data } = await axios.get(endpoint, {
+      ...options,
+      // Prevents non-200 responses from failing the promise.
+      validateStatus: () => true,
+    });
 
-    const groups: AcmeGroup[] = [
-      {
-        id: 'acme-group-1',
-        name: 'Group One',
-        users: [
-          {
-            id: 'acme-user-1',
-          },
-        ],
-      },
-    ];
-
-    for (const group of groups) {
-      await iteratee(group);
+    if (status === 200) {
+      return data as SigSciResponseFormat;
+    } else if ([401, 403].includes(status)) {
+      throw new IntegrationProviderAuthenticationError({
+        endpoint,
+        cause: new Error(data),
+        status: status,
+        statusText: statusText,
+      });
+    } else {
+      throw new IntegrationProviderAPIError({
+        endpoint,
+        cause: new Error(data),
+        status: status,
+        statusText: statusText,
+      });
     }
   }
 }
 
-export function createAPIClient(config: IntegrationConfig): APIClient {
-  return new APIClient(config);
+export function createAPIClient(
+  logger: IntegrationLogger,
+  config: IntegrationConfig,
+): SignalSciencesAPIClient {
+  return new SignalSciencesAPIClient(logger, config);
 }

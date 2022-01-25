@@ -1,0 +1,273 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should collect user data validate client integration and converters 1`] = `
+Object {
+  "collectedEntities": Array [
+    Object {
+      "_class": Array [
+        "Organization",
+      ],
+      "_key": "jupiterone",
+      "_rawData": Array [
+        Object {
+          "name": "default",
+          "rawData": Object {
+            "displayName": "JupiterOne",
+            "name": "jupiterone",
+          },
+        },
+      ],
+      "_type": "sigsci_corp",
+      "apiTokenMaxAge": undefined,
+      "authType": undefined,
+      "createdOn": undefined,
+      "displayName": "JupiterOne",
+      "logoutURI": undefined,
+      "name": "jupiterone",
+      "restrictedAccessTokens": undefined,
+      "samlCert": undefined,
+      "samlRequestCert": undefined,
+      "sessionMaxAgeDashboard": undefined,
+      "signRequestsUsingStoredCert": undefined,
+      "siteLimit": undefined,
+      "sitesUri": undefined,
+      "smallIconURI": undefined,
+      "ssoProvisioningConfigured": undefined,
+      "webLink": "https://dashboard.signalsciences.net/corps/jupiterone/overview",
+    },
+    Object {
+      "_class": Array [
+        "User",
+      ],
+      "_key": "samuel.poulton+sigsci_observer@jupiterone.com",
+      "_rawData": Array [
+        Object {
+          "name": "default",
+          "rawData": Object {
+            "accessTokenAllowed": true,
+            "accessTokens": Object {
+              "uri": "/api/v0/user/apitokens",
+            },
+            "announcements": Object {
+              "uri": "/api/v0/user/announcements",
+            },
+            "apiUser": false,
+            "authStatus": "none",
+            "corpAuthType": "builtin",
+            "created": "2022-01-19T21:49:48.458Z",
+            "defaultDashboards": Object {
+              "uri": "/api/v0/user/defaultDashboards",
+            },
+            "email": "samuel.poulton+sigsci_observer@jupiterone.com",
+            "memberships": Object {
+              "data": Array [],
+              "uri": "/api/v0/corps/jupiterone/users/samuel.poulton+sigsci_observer@jupiterone.com/memberships",
+            },
+            "mfaEnabled": false,
+            "name": "Samuel Poulton Observer",
+            "role": "observer",
+            "ssoProvisioned": false,
+            "status": "active",
+          },
+        },
+      ],
+      "_type": "sigsci_user",
+      "active": true,
+      "createdOn": 1642628988458,
+      "displayName": "Samuel Poulton Observer",
+      "email": "samuel.poulton+sigsci_observer@jupiterone.com",
+      "mfaEnabled": false,
+      "name": "Samuel Poulton Observer",
+      "role": "observer",
+      "status": "active",
+      "username": "samuel.poulton+sigsci_observer@jupiterone.com",
+      "webLink": "https://dashboard.signalsciences.net/corps/jupiterone/users/samuel.poulton+sigsci_observer@jupiterone.com",
+    },
+    Object {
+      "_class": Array [
+        "User",
+      ],
+      "_key": "samuel.poulton@jupiterone.com",
+      "_rawData": Array [
+        Object {
+          "name": "default",
+          "rawData": Object {
+            "accessTokenAllowed": true,
+            "accessTokens": Object {
+              "uri": "/api/v0/user/apitokens",
+            },
+            "announcements": Object {
+              "uri": "/api/v0/user/announcements",
+            },
+            "apiUser": false,
+            "authStatus": "none",
+            "corpAuthType": "builtin",
+            "created": "2022-01-18T17:51:41.435Z",
+            "defaultDashboards": Object {
+              "uri": "/api/v0/user/defaultDashboards",
+            },
+            "email": "samuel.poulton@jupiterone.com",
+            "memberships": Object {
+              "data": Array [],
+              "uri": "/api/v0/corps/jupiterone/users/samuel.poulton@jupiterone.com/memberships",
+            },
+            "mfaEnabled": false,
+            "name": "Samuel Poulton",
+            "role": "owner",
+            "ssoProvisioned": false,
+            "status": "active",
+          },
+        },
+      ],
+      "_type": "sigsci_user",
+      "active": true,
+      "createdOn": 1642528301435,
+      "displayName": "Samuel Poulton",
+      "email": "samuel.poulton@jupiterone.com",
+      "mfaEnabled": false,
+      "name": "Samuel Poulton",
+      "role": "owner",
+      "status": "active",
+      "username": "samuel.poulton@jupiterone.com",
+      "webLink": "https://dashboard.signalsciences.net/corps/jupiterone/users/samuel.poulton@jupiterone.com",
+    },
+    Object {
+      "_class": Array [
+        "User",
+      ],
+      "_key": "sam.andrus@jupiterone.com",
+      "_rawData": Array [
+        Object {
+          "name": "default",
+          "rawData": Object {
+            "accessTokenAllowed": true,
+            "accessTokens": Object {
+              "uri": "/api/v0/user/apitokens",
+            },
+            "announcements": Object {
+              "uri": "/api/v0/user/announcements",
+            },
+            "apiUser": false,
+            "authStatus": "none",
+            "corpAuthType": "builtin",
+            "created": "2022-01-10T18:30:40.62Z",
+            "defaultDashboards": Object {
+              "uri": "/api/v0/user/defaultDashboards",
+            },
+            "email": "sam.andrus@jupiterone.com",
+            "memberships": Object {
+              "data": Array [],
+              "uri": "/api/v0/corps/jupiterone/users/sam.andrus@jupiterone.com/memberships",
+            },
+            "mfaEnabled": false,
+            "name": "Sam Andrus",
+            "role": "owner",
+            "ssoProvisioned": false,
+            "status": "active",
+          },
+        },
+      ],
+      "_type": "sigsci_user",
+      "active": true,
+      "createdOn": 1641839440620,
+      "displayName": "Sam Andrus",
+      "email": "sam.andrus@jupiterone.com",
+      "mfaEnabled": false,
+      "name": "Sam Andrus",
+      "role": "owner",
+      "status": "active",
+      "username": "sam.andrus@jupiterone.com",
+      "webLink": "https://dashboard.signalsciences.net/corps/jupiterone/users/sam.andrus@jupiterone.com",
+    },
+    Object {
+      "_class": Array [
+        "User",
+      ],
+      "_key": "austin.kelleher@jupiterone.com",
+      "_rawData": Array [
+        Object {
+          "name": "default",
+          "rawData": Object {
+            "accessTokenAllowed": true,
+            "accessTokens": Object {
+              "uri": "/api/v0/user/apitokens",
+            },
+            "announcements": Object {
+              "uri": "/api/v0/user/announcements",
+            },
+            "apiUser": false,
+            "authStatus": "none",
+            "corpAuthType": "builtin",
+            "created": "2022-01-10T18:30:28.296Z",
+            "defaultDashboards": Object {
+              "uri": "/api/v0/user/defaultDashboards",
+            },
+            "email": "austin.kelleher@jupiterone.com",
+            "memberships": Object {
+              "data": Array [],
+              "uri": "/api/v0/corps/jupiterone/users/austin.kelleher@jupiterone.com/memberships",
+            },
+            "mfaEnabled": false,
+            "name": "Austin Kelleher",
+            "role": "owner",
+            "ssoProvisioned": false,
+            "status": "active",
+          },
+        },
+      ],
+      "_type": "sigsci_user",
+      "active": true,
+      "createdOn": 1641839428296,
+      "displayName": "Austin Kelleher",
+      "email": "austin.kelleher@jupiterone.com",
+      "mfaEnabled": false,
+      "name": "Austin Kelleher",
+      "role": "owner",
+      "status": "active",
+      "username": "austin.kelleher@jupiterone.com",
+      "webLink": "https://dashboard.signalsciences.net/corps/jupiterone/users/austin.kelleher@jupiterone.com",
+    },
+  ],
+  "collectedRelationships": Array [
+    Object {
+      "_class": "HAS",
+      "_fromEntityKey": "jupiterone",
+      "_key": "jupiterone|has|samuel.poulton+sigsci_observer@jupiterone.com",
+      "_toEntityKey": "samuel.poulton+sigsci_observer@jupiterone.com",
+      "_type": "sigsci_corp_has_user",
+      "displayName": "HAS",
+    },
+    Object {
+      "_class": "HAS",
+      "_fromEntityKey": "jupiterone",
+      "_key": "jupiterone|has|samuel.poulton@jupiterone.com",
+      "_toEntityKey": "samuel.poulton@jupiterone.com",
+      "_type": "sigsci_corp_has_user",
+      "displayName": "HAS",
+    },
+    Object {
+      "_class": "HAS",
+      "_fromEntityKey": "jupiterone",
+      "_key": "jupiterone|has|sam.andrus@jupiterone.com",
+      "_toEntityKey": "sam.andrus@jupiterone.com",
+      "_type": "sigsci_corp_has_user",
+      "displayName": "HAS",
+    },
+    Object {
+      "_class": "HAS",
+      "_fromEntityKey": "jupiterone",
+      "_key": "jupiterone|has|austin.kelleher@jupiterone.com",
+      "_toEntityKey": "austin.kelleher@jupiterone.com",
+      "_type": "sigsci_corp_has_user",
+      "displayName": "HAS",
+    },
+  ],
+  "encounteredTypes": Array [
+    "sigsci_corp",
+    "sigsci_user",
+    "sigsci_corp_has_user",
+  ],
+  "numCollectedEntities": 5,
+  "numCollectedRelationships": 4,
+}
+`;
