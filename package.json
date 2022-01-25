@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-signal-sciences",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A JupiterOne Integration for integesting data from Signal Sciences",
   "license": "MPL-2.0",
   "main": "src/index.js",
