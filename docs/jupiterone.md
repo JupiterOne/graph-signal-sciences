@@ -1,4 +1,4 @@
-# Integration with JupiterOne
+# Signal Sciences Integration with JupiterOne
 
 ## Signal Sciences + JupiterOne Integration Benefits
 
