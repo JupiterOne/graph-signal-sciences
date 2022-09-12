@@ -18,7 +18,7 @@ questions:
   title: Who are the active users within Signal Sciences that are configured with an Observer role?
   description: Returns a list of active Signal Sciences users who can view corporate data.
   queries:
-  - name: Signal Science Observers
+  - name: Signal Sciences Observers
     resultsAre: BAD
     query: |
       FIND UNIQUE sigsci_user WITH role ~= "observer" AND status ~= "active" 
