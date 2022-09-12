@@ -1,15 +1,28 @@
 ---
-sourceId: managed:template
+sourceId: managed:signal-sciences
 integrationDefinitionId: '${integration_definition_id}'
-questions: []
-  # - id: integration-question-template-replace-me
-  #   title: What kinds of questions will this integration support?
-  #   description:
-  #     TODO Every integration should contribute questions! Please be carefule
-  #     to replace this before deploying the integration to JupiterOne.
-  #   queries:
-  #     - name: good
-  #       query: |
-  #         find * with _integrationDefinitionId = '${integration_definition_id}'
-  #   tags:
-  #     - template
+questions: 
+- id: managed-question-signal-sciences-active-users-with-no-multi-factor-authentication
+  title: Who are the active users within Signal Sciences that do not have MFA Enabled?
+  description: Returns a list of active Signal Sciences users that do not have MFA enabled.
+  queries:
+  - name: Signal Sciences Multi-factor Authentication
+    resultsAre: BAD
+    query: |
+      FIND UNIQUE sigsci_user WITH active = true AND mfaEnabled != true 
+  tags:
+  - signal-sciences
+  - user 
+
+- id: managed-question-signal-sciences-active-users-that-have-an-observer-role
+  title: Who are the active users within Signal Sciences that are configured with an Observer role?
+  description: Returns a list of active Signal Sciences users who can view corporate data.
+  queries:
+  - name: Signal Sciences Observers
+    resultsAre: BAD
+    query: |
+      FIND UNIQUE sigsci_user WITH role ~= "observer" AND status ~= "active" 
+        THAT !IS employee
+  tags:
+  - signal-sciences
+  - user 
