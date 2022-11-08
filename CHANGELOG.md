@@ -8,6 +8,7 @@ and this project adheres to
 
 ## [Unreleased]
 
+- Updated J1 SDK packages to v8.X
 - The following new entities are **now** created:
 
 | Resources | Entity `_type`    | Entity `_class` |
