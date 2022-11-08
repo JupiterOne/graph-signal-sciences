@@ -82,10 +82,11 @@ https://github.com/JupiterOne/sdk/blob/main/docs/integrations/development.md
 
 The following entities are created:
 
-| Resources    | Entity `_type` | Entity `_class` |
-| ------------ | -------------- | --------------- |
-| Organization | `sigsci_corp`  | `Organization`  |
-| User         | `sigsci_user`  | `User`          |
+| Resources    | Entity `_type`    | Entity `_class` |
+| ------------ | ----------------- | --------------- |
+| CloudWAF     | `sigsci_cloudwaf` | `Firewall`      |
+| Organization | `sigsci_corp`     | `Organization`  |
+| User         | `sigsci_user`     | `User`          |
 
 ### Relationships
 
@@ -93,6 +94,7 @@ The following relationships are created:
 
 | Source Entity `_type` | Relationship `_class` | Target Entity `_type` |
 | --------------------- | --------------------- | --------------------- |
+| `sigsci_corp`         | **HAS**               | `sigsci_cloudwaf`     |
 | `sigsci_corp`         | **HAS**               | `sigsci_user`         |
 
 <!--

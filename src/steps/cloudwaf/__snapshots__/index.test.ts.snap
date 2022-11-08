@@ -1,0 +1,225 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should collect cloudwaf instance data validate client integration and converters 1`] = `
+Object {
+  "collectedEntities": Array [
+    Object {
+      "_class": Array [
+        "Organization",
+      ],
+      "_key": "jupiterone",
+      "_rawData": Array [
+        Object {
+          "name": "default",
+          "rawData": Object {
+            "displayName": "JupiterOne",
+            "name": "jupiterone",
+          },
+        },
+      ],
+      "_type": "sigsci_corp",
+      "apiTokenMaxAge": undefined,
+      "authType": undefined,
+      "createdOn": undefined,
+      "displayName": "JupiterOne",
+      "logoutURI": undefined,
+      "name": "jupiterone",
+      "restrictedAccessTokens": undefined,
+      "samlCert": undefined,
+      "samlRequestCert": undefined,
+      "sessionMaxAgeDashboard": undefined,
+      "signRequestsUsingStoredCert": undefined,
+      "siteLimit": undefined,
+      "sitesUri": undefined,
+      "smallIconURI": undefined,
+      "ssoProvisioningConfigured": undefined,
+      "webLink": "https://dashboard.signalsciences.net/corps/jupiterone/overview",
+    },
+    Object {
+      "_class": Array [
+        "Firewall",
+      ],
+      "_key": "sigsci_cloudwaf:9adf79f2-6553-4008-a012-e2e78d1c40eb",
+      "_rawData": Array [
+        Object {
+          "name": "default",
+          "rawData": Object {
+            "created": "2022-11-07T05:27:11Z",
+            "createdBy": "sam.andrus@jupiterone.com",
+            "deployment": Object {
+              "dnsEntry": "9adf79f2-6553-4008-a012-e2e78d1c40eb.sigscicloudwaf.com",
+              "egressIPs": Array [
+                Object {
+                  "ip": "54.157.9.221",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "3.211.133.174",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "44.198.49.148",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "3.222.240.59",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "44.198.76.176",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "34.192.82.71",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "3.216.58.131",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "18.214.162.196",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "54.84.118.7",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "52.204.194.140",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "3.232.125.243",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "107.22.39.13",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "54.147.50.184",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "54.160.112.153",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "3.227.47.195",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+                Object {
+                  "ip": "3.208.110.204",
+                  "status": "unknown",
+                  "updatedAt": "",
+                },
+              ],
+              "message": "",
+              "status": "done",
+            },
+            "description": "testinstance",
+            "id": "9adf79f2-6553-4008-a012-e2e78d1c40eb",
+            "name": "testinstance",
+            "region": "us-east-1",
+            "tlsMinVersion": "1.2",
+            "updatedBy": "",
+            "useUploadedCertificates": false,
+            "workspaceConfigs": Array [
+              Object {
+                "clientIPHeader": "",
+                "instanceLocation": "direct",
+                "listenerProtocols": Array [
+                  "https",
+                ],
+                "routes": Array [
+                  Object {
+                    "certificateIds": Array [],
+                    "connectionPooling": true,
+                    "domains": Array [
+                      "paradox-test.blogspot.com",
+                    ],
+                    "id": "4d14d79e-1f1b-4c8f-a662-1c07ff4c46db",
+                    "origin": "https://paradox-test.blogspot.com/",
+                    "passHostHeader": false,
+                    "trustProxyHeaders": false,
+                  },
+                ],
+                "siteName": "test",
+              },
+            ],
+          },
+        },
+      ],
+      "_type": "sigsci_cloudwaf",
+      "category": Array [
+        "application",
+      ],
+      "createdBy": "sam.andrus@jupiterone.com",
+      "createdOn": 1667798831000,
+      "deployment.DnsEntry": "9adf79f2-6553-4008-a012-e2e78d1c40eb.sigscicloudwaf.com",
+      "deployment.EgressIps": Array [
+        "54.157.9.221",
+        "3.211.133.174",
+        "44.198.49.148",
+        "3.222.240.59",
+        "44.198.76.176",
+        "34.192.82.71",
+        "3.216.58.131",
+        "18.214.162.196",
+        "54.84.118.7",
+        "52.204.194.140",
+        "3.232.125.243",
+        "107.22.39.13",
+        "54.147.50.184",
+        "54.160.112.153",
+        "3.227.47.195",
+        "3.208.110.204",
+      ],
+      "deployment.Message": "",
+      "deployment.Status": "done",
+      "description": "testinstance",
+      "displayName": "testinstance",
+      "id": "9adf79f2-6553-4008-a012-e2e78d1c40eb",
+      "name": "testinstance",
+      "region": "us-east-1",
+      "siteName": "test",
+      "tlsMinVersion": "1.2",
+      "updatedBy": "",
+      "useUploadedCertificates": false,
+    },
+  ],
+  "collectedRelationships": Array [
+    Object {
+      "_class": "HAS",
+      "_fromEntityKey": "jupiterone",
+      "_key": "jupiterone|has|sigsci_cloudwaf:9adf79f2-6553-4008-a012-e2e78d1c40eb",
+      "_toEntityKey": "sigsci_cloudwaf:9adf79f2-6553-4008-a012-e2e78d1c40eb",
+      "_type": "sigsci_corp_has_cloudwaf",
+      "displayName": "HAS",
+    },
+  ],
+  "encounteredTypes": Array [
+    "sigsci_corp",
+    "sigsci_cloudwaf",
+    "sigsci_corp_has_cloudwaf",
+  ],
+  "numCollectedEntities": 2,
+  "numCollectedRelationships": 1,
+}
+`;

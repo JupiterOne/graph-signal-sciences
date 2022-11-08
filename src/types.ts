@@ -29,6 +29,44 @@ export interface SignalSciencesCorp {
   ssoProvisioningConfigured: boolean;
 }
 
+export interface SignalSciencesCloudWAF {
+  id: string;
+  name: string;
+  description: string;
+  region: string;
+  tlsMinVersion: string;
+  workspaceConfigs: {
+    siteName: string;
+    instanceLocation: string;
+    clientIPHeader: string;
+    litstenerProtocols: string;
+    routes: {
+      certificateIds: string[];
+      domains: string[];
+      origin: string;
+      passHostHeader: boolean;
+      id: string;
+      connectionPooling: boolean;
+      trustProxyHeaders: boolean;
+    }[];
+  }[];
+  deployment: {
+    status: string;
+    message: string;
+    egressIPs: {
+      ip: string;
+      status: string;
+      updatedAt: string;
+    }[];
+    dnsEntry: string;
+  };
+
+  useUploadedCertificates: boolean;
+  createdBy: string;
+  created: string;
+  updatedBy: string;
+}
+
 export interface SigSciResponseFormat {
   data?: any;
   message?: string;

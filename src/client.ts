@@ -12,6 +12,7 @@ import {
   SignalSciencesUser,
   SignalSciencesCorp,
   SigSciResponseFormat,
+  SignalSciencesCloudWAF,
 } from './types';
 
 export type ResourceIteratee<T> = (each: T) => Promise<void> | void;
@@ -88,6 +89,21 @@ export class SignalSciencesAPIClient {
 
     for (const user of data) {
       await iteratee(user);
+    }
+  }
+
+  public async iterateCloudWAFInstances(
+    corpName: string,
+    iteratee: ResourceIteratee<SignalSciencesCloudWAF>,
+  ): Promise<void> {
+    const endpoint = this.buildEndpoint(corpName, '/cloudwafInstances');
+
+    const { data } = await this.fetch(endpoint, {
+      headers: this.headers,
+    });
+
+    for (const cloudwaf of data) {
+      await iteratee(cloudwaf);
     }
   }
 
