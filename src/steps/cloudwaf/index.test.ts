@@ -68,7 +68,10 @@ describe('should collect cloudwaf instance data', () => {
           description: { type: 'string' },
           region: { type: 'string' },
           tlsMinVersion: { type: 'string' },
-          siteName: { type: 'string' },
+          siteNames: {
+            type: 'array',
+            items: { type: 'string' },
+          },
           'deployment.Status': { type: 'string' },
           'deployment.Message': { type: 'string' },
           'deployment.EgressIps': {

@@ -7,7 +7,7 @@ import { createAPIClient } from '../../client';
 import { IntegrationConfig } from '../../config';
 import { Entities, Steps, Relationships } from '../constants';
 import {
-  createOrganizationCloudwafRelationship,
+  createOrganizationCloudWafRelationship,
   createCloudWAFEntity,
 } from './converter';
 
@@ -30,7 +30,7 @@ export async function fetchCloudWAF({
         );
 
         await jobState.addRelationship(
-          createOrganizationCloudwafRelationship(
+          createOrganizationCloudWafRelationship(
             organizationEntity,
             cloudwafEntity,
           ),

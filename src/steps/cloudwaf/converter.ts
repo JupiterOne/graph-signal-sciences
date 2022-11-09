@@ -28,7 +28,7 @@ export function createCloudWAFEntity(cloudWAF: SignalSciencesCloudWAF): Entity {
         description: cloudWAF.description,
         region: cloudWAF.region,
         tlsMinVersion: cloudWAF.tlsMinVersion,
-        siteName: cloudWAF.workspaceConfigs[0].siteName,
+        siteNames: cloudWAF.workspaceConfigs.map((config) => config.siteName),
         'deployment.Status': cloudWAF.deployment.status,
         'deployment.Message': cloudWAF.deployment.message,
         'deployment.EgressIps': cloudWAF.deployment.egressIPs.map(
@@ -44,7 +44,7 @@ export function createCloudWAFEntity(cloudWAF: SignalSciencesCloudWAF): Entity {
   });
 }
 
-export function createOrganizationCloudwafRelationship(
+export function createOrganizationCloudWafRelationship(
   orgainzation: Entity,
   cloudWaf: Entity,
 ): Relationship {

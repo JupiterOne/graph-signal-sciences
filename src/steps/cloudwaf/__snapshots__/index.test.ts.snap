@@ -198,7 +198,9 @@ Object {
       "id": "9adf79f2-6553-4008-a012-e2e78d1c40eb",
       "name": "testinstance",
       "region": "us-east-1",
-      "siteName": "test",
+      "siteNames": Array [
+        "test",
+      ],
       "tlsMinVersion": "1.2",
       "updatedBy": "",
       "useUploadedCertificates": false,
