@@ -2,13 +2,15 @@
 
 ## Signal Sciences + JupiterOne Integration Benefits
 
-- Visualize Signal Sciences corps and users in the JupiterOne graph.
-- Monitor changes to Signal Sciences users and corps using JupiterOne alerts.
+- Visualize Signal Sciences corps, users and cloudwaf instances in the
+  JupiterOne graph.
+- Monitor changes to Signal Sciences users, corps and cloudwaf instances using
+  JupiterOne alerts.
 
 ## How it Works
 
-- JupiterOne periodically fetches users from Signal Sciences to update the
-  graph.
+- JupiterOne periodically fetches users, corps and cloudwaf instances from
+  Signal Sciences to update the graph.
 - Write JupiterOne queries to review and monitor updates to the graph, or
   leverage existing queries.
 - Configure alerts to take action when JupiterOne graph changes, or leverage
@@ -82,10 +84,11 @@ https://github.com/JupiterOne/sdk/blob/main/docs/integrations/development.md
 
 The following entities are created:
 
-| Resources    | Entity `_type` | Entity `_class` |
-| ------------ | -------------- | --------------- |
-| Organization | `sigsci_corp`  | `Organization`  |
-| User         | `sigsci_user`  | `User`          |
+| Resources    | Entity `_type`    | Entity `_class` |
+| ------------ | ----------------- | --------------- |
+| CloudWAF     | `sigsci_cloudwaf` | `Firewall`      |
+| Organization | `sigsci_corp`     | `Organization`  |
+| User         | `sigsci_user`     | `User`          |
 
 ### Relationships
 
@@ -93,6 +96,7 @@ The following relationships are created:
 
 | Source Entity `_type` | Relationship `_class` | Target Entity `_type` |
 | --------------------- | --------------------- | --------------------- |
+| `sigsci_corp`         | **HAS**               | `sigsci_cloudwaf`     |
 | `sigsci_corp`         | **HAS**               | `sigsci_user`         |
 
 <!--
