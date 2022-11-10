@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## 2.0.0 - 2022-11-10
+
 - Updated J1 SDK packages to v8.X
 - The following new entities are **now** created:
 
